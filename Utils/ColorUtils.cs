@@ -90,5 +90,36 @@ namespace PaletteMaker.Utils
             return (r8, g8, b8);
         }
 
+        public static (double H, double S, double L) RgbToHsl(byte r, byte g, byte b)
+        {
+            double rF = r / 255.0;
+            double gF = g / 255.0;
+            double bF = b / 255.0;
+
+            double max = Math.Max(rF, Math.Max(gF, bF));
+            double min = Math.Min(rF, Math.Min(gF, bF));
+            double h = 0, s, l = (max + min) / 2;
+
+            if (max == min)
+            {
+                h = s = 0; // achromatic
+            }
+            else
+            {
+                double d = max - min;
+                s = l > 0.5 ? d / (2.0 - max - min) : d / (max + min);
+
+                if (max == rF)
+                    h = (gF - bF) / d + (gF < bF ? 6 : 0);
+                else if (max == gF)
+                    h = (bF - rF) / d + 2;
+                else if (max == bF)
+                    h = (rF - gF) / d + 4;
+
+                h /= 6;
+            }
+
+            return (h * 360.0, s, l);
+        }
     } // class ColorUtils
 } // namespace PaletteMaker

@@ -2,11 +2,48 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d"
+        d:DesignWidth="800" d:DesignHeight="450"
         x:Class="PaletteMaker.MainWindow"
-        Title="PaletteMaker">
-    <StackPanel Margin="10" Spacing="10">
-        <Button Name="PickImageButton" Content="Select Image" Width="150" Height="40"/>
-        <WrapPanel Name="PalettePanel" />
-    </StackPanel> 
+        Title="PaletteMaker"
+        Background="#222222">
+
+    <Window.Styles>
+        <Style Selector="TextBlock.ColorSwatchLabel">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0, 0, 0, 4"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#444444"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </Window.Styles>
+
+    <DockPanel Margin="10" LastChildFill="True" Background="#222222">
+        <StackPanel DockPanel.Dock="Top" Spacing="10">
+            <Button Name="PickImageButton"
+                    Content="Select Image"
+                    Width="150"
+                    Height="40"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Margin="0,0,0,10"/>
+            
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
+                <TextBlock Text="Number of Colors:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White"/>
+                <Slider x:Name="ClusterSlider" Minimum="2" Maximum="24" Value="8" Width="200" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <TextBlock x:Name="ClusterCountLabel" Text="8" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Name="PalettePanel" Spacing="10" Margin="0,0,0,10"/>
+        </ScrollViewer>
+    </DockPanel>
 </Window>

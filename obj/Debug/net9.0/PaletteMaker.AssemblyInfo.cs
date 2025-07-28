@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PaletteMaker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+84333c623be1edddb0998ac1a6cb9ddc67d03339")]
 [assembly: System.Reflection.AssemblyProductAttribute("PaletteMaker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PaletteMaker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

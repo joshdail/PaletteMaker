@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Layout;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using PaletteMaker.Utils; // <-- Make sure this matches your namespace structure
+using PaletteMaker.Utils;
 
 namespace PaletteMaker
 {
@@ -19,6 +20,11 @@ namespace PaletteMaker
         {
             InitializeComponent();
             PickImageButton.Click += async (_, __) => await PickImageAndProcessAsync();
+            ClusterSlider.PropertyChanged += (_, args) =>
+            {
+                if (args.Property == Slider.ValueProperty)
+                    ClusterCountLabel.Text = ((int)ClusterSlider.Value).ToString();
+            };
         }
 
         private async Task PickImageAndProcessAsync()
@@ -61,7 +67,7 @@ namespace PaletteMaker
 
             var labPixels = rgbPixels.Select(p => ColorUtils.RgbToLab(p.R, p.G, p.B)).ToList();
 
-            var kmeans = new KMeansClusterer(4);
+            var kmeans = new KMeansClusterer(Convert.ToInt32(ClusterSlider.Value));
             var clusteredLabs = kmeans.Fit(labPixels);
 
             var clusterColors = clusteredLabs
@@ -70,24 +76,46 @@ namespace PaletteMaker
 
             foreach (var (r, g, b) in clusterColors)
             {
+                var hsl = ColorUtils.RgbToHsl(r, g, b);
+                string hex = $"#{r:X2}{g:X2}{b:X2}";
+                string rgb = $"RGB: ({r}, {g}, {b})";
+                string hslStr = $"HSL: ({(int)hsl.H}, {(int)(hsl.S * 100)}%, {(int)(hsl.L * 100)}%)";
+
+                // Color Swatch (square)
                 var rect = new Border
                 {
-                    Width = 60,
-                    Height = 60,
+                    Width = 80,
+                    Height = 80,
                     Background = new SolidColorBrush(Color.FromRgb(r, g, b)),
                     Margin = new Thickness(5)
                 };
-                PalettePanel.Children.Add(rect);
 
-                var hexText = new TextBlock
+                // Labels (in vertical stack)
+                var labels = new StackPanel
                 {
-                    Text = $"#{r:X2}{g:X2}{b:X2}",
-                    Foreground = Brushes.Black,
-                    Margin = new Thickness(5),
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
+                    Orientation = Orientation.Vertical,
+                    Margin = new Thickness(10, 0, 0, 0),
+                    HorizontalAlignment = HorizontalAlignment.Stretch
                 };
-                PalettePanel.Children.Add(hexText);
-            }
-        }
+
+                labels.Children.Add(new TextBlock { Text = hex, Classes = { "ColorSwatchLabel" } });
+                labels.Children.Add(new TextBlock { Text = rgb, Classes = { "ColorSwatchLabel" } });
+                labels.Children.Add(new TextBlock { Text = hslStr, Classes = { "ColorSwatchLabel" } });
+
+                // Horizontal row: swatch + label block
+                var itemRow = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Width = double.NaN // let it auto-size
+                };
+
+                itemRow.Children.Add(rect);
+                itemRow.Children.Add(labels);
+
+                PalettePanel.Children.Add(itemRow);
+            } // foreach
+        } // LoadImageAndGeneratePalette
     } // partial class MainWindow
 } // namespace PaletteMaker

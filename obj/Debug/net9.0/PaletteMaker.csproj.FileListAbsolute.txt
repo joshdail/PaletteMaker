@@ -65,3 +65,4 @@
 /Users/josh/Local/Projects/PaletteMaker/obj/Debug/net9.0/PaletteMaker.genruntimeconfig.cache
 /Users/josh/Local/Projects/PaletteMaker/obj/Debug/net9.0/ref/PaletteMaker.dll
 /Users/josh/Local/Projects/PaletteMaker/bin/Debug/net9.0/SixLabors.ImageSharp.dll
+/Users/josh/Local/Projects/PaletteMaker/obj/Debug/net9.0/PaletteMaker.sourcelink.json
